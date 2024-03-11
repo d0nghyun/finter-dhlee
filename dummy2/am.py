@@ -33,4 +33,4 @@ class Alpha(BaseAlpha):
         # Shift positions to avoid look-ahead bias
         alpha = position.shift(1)
         return alpha.loc[str(start): str(end)]
-##
+
