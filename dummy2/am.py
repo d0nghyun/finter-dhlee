@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from finter.framework_model import BaseAlpha
+from finter import BaseAlpha
 
 def calculate_previous_start_date(start_date, lookback_days):
     start = datetime.strptime(str(start_date), "%Y%m%d")
@@ -33,4 +33,4 @@ class Alpha(BaseAlpha):
         # Shift positions to avoid look-ahead bias
         alpha = position.shift(1)
         return alpha.loc[str(start): str(end)]
-
+####
