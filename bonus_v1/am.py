@@ -96,6 +96,6 @@ class Alpha(BaseAlpha):
         )
 
         # 포지션 이동
-        position = position.shift()
+        position = position.shift().fillna(0)
 
         return position
