@@ -90,9 +90,10 @@ class Alpha(BaseAlpha):
 
         # 포지션 계산
         position = start_flag.fillna(end_flag).ffill().replace(-1, np.nan)
+        position = position * 0.02e8
         allocate = position.sum(axis=1)
         position[allocate >= 1e8] = position[allocate >= 1e8].div(
-            position / 1e8, axis=0
+            allocate / 1e8, axis=0
         )
 
         # 포지션 이동
