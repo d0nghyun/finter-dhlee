@@ -23,7 +23,8 @@ class Alpha(BaseAlpha):
         bonus = cf_raw.get_df("content.dart.api.disclosure.bonus_issue.1d")
 
         # 보너스 데이터 정리
-        bonus = bonus.unstack().dropna()
+        # bonus = bonus.unstack().dropna()
+        bonus = bonus.reset_index().melt(id_vars='index', value_vars=bonus.columns).dropna().set_index(['index', 'variable'])['value']
 
         # 날짜 데이터 처리
         end_date = pd.to_datetime(
@@ -34,7 +35,7 @@ class Alpha(BaseAlpha):
 
         # 날짜 데이터프레임 생성
         end_date_df = end_date.reset_index()
-        end_date_df.columns = "ccid", "start_date", "end_date"
+        end_date_df.columns = "start_date", "ccid", "end_date"
 
         # 시작 날짜 데이터 처리
         end_date_df["start_date"] = end_date_df["start_date"].dt.date
