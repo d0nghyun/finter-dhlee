@@ -1,0 +1,12 @@
+{
+    "exchange": "krx",
+    "universe": "krx",
+    "instrument_type": "stock",
+    "freq": "1d",
+    "position_type": "target",
+    "type": "alpha",
+    "exposure": "long_only",
+    "submission_time": "2024-06-26 02:07:30.183338",
+    "nickname": "bonus_v11",
+    "model_dir": "bonus_v11"
+}
