@@ -98,7 +98,7 @@ class Alpha(BaseAlpha):
         # 포지션 계산
         position = start_flag.fillna(end_flag).ffill().replace(-1, np.nan)
 
-        descriptor = cf_raw.get_df("content.handa.dataguide.factor.debt-to-market.1d").rank(pct=True, axis=1)
+        descriptor = cf_raw.get_df("content.handa.dataguide.descriptor.debt-to-market.1d").rank(pct=True, axis=1)
         descriptor[descriptor == 1] = .99
 
         descriptor = (descriptor < 0.5).astype(float)
