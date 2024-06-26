@@ -36,4 +36,4 @@ class Portfolio(BasePortfolio):
         pf = sum(map(lambda x: x.fillna(0), alpha_dict.values()))
 
         pf = pf.div(pf.sum(axis=1), axis=0) * 1e8
-        return pf
+        return pf.fillna(0)
