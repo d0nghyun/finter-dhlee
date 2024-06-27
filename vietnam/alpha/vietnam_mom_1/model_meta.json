@@ -1,0 +1,12 @@
+{
+    "exchange": "vnm",
+    "universe": "compustat",
+    "instrument_type": "stock",
+    "freq": "1d",
+    "position_type": "target",
+    "type": "alpha",
+    "exposure": "long_only",
+    "submission_time": "2024-06-27 11:11:25.572906",
+    "nickname": "vietnam_mom_1",
+    "model_dir": "vietnam/alpha/vietnam_mom_1"
+}
