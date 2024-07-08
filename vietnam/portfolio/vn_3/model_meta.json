@@ -1,0 +1,11 @@
+{
+    "exchange": "vnm",
+    "universe": "compustat",
+    "instrument_type": "stock",
+    "freq": "1d",
+    "position_type": "target",
+    "type": "portfolio",
+    "submission_time": "2024-07-08 22:55:39.901217",
+    "nickname": "vn_3",
+    "model_dir": "vietnam/portfolio/vn_3"
+}
