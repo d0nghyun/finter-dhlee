@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 import numpy as np
 import pandas as pd
 from finter import BasePortfolio
+from finter.data import ContentFactory
 
 model_info = {
     "exchange": "vnm",             # Korean Exchange (KRX)
