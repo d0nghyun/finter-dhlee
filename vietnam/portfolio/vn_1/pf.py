@@ -14,7 +14,7 @@ model_info = {
 }
 
 class Portfolio(BasePortfolio):
-    alpha_set = {f"vnm.compustat.stock.ldh0127.mom_{i}" for i in range(1, 5)}
+    alpha_set = {f"vnm.compustat.stock.ldh0127.mom_{i}" for i in range(2, 5)}
     alpha_set = alpha_set | set(["vnm.compustat.stock.ldh0127.vietnam_mom_2"])
 
     def alpha_loader(self, start, end):
@@ -37,12 +37,20 @@ class Portfolio(BasePortfolio):
         gics.columns = gics.columns + '01W'
 
         price = cf.get_df('price_close')
-
+        
+        mkt = price * cf.get_df('shares_outstanding')
+        
 
         ret = price.pct_change(fill_method=None)
         ret = ret[ret.abs().rank(axis=1, pct=True)<0.99]
+        
+        shmom = ret.rolling(5).sum().abs()
+        
+        
+        
         sector = gics.fillna(0).applymap(lambda x: str(x)[:2])
         unique_sectors = set(sector.values.flatten())
+        unique_sectors -= set(['0.', '15', '50'])
 
         sector_momentum = pd.DataFrame()
 
@@ -61,10 +69,11 @@ class Portfolio(BasePortfolio):
             top_sectors = top_2_sectors.loc[date][top_2_sectors.loc[date]].index
             for top_sector in top_sectors:
                 sector_code = top_sector.split('_')[1]
-                top_2_mask.loc[date] |= (sector.loc[date] == sector_code)
+                # top_2_mask.loc[date] |= (sector.loc[date] == sector_code)
+                temp_df = (sector.loc[date] == sector_code)
+                temp_df = (temp_df * 1) * mkt.loc[date]
+                top_2_mask.loc[date] = temp_df.rank(ascending=False) <= 300
 
-
-        
         alpha_loader = self.alpha_loader(_start, end)
         alpha_dict = {}
         for i in self.alpha_set:
@@ -79,8 +88,12 @@ class Portfolio(BasePortfolio):
         result_df = pd.concat(positive_dfs).groupby(level=0).sum()
         signal = result_df[result_df>=2]
         
-        signal *= top_2_mask.replace(False, np.nan).ffill(limit=21).shift()
+        signal *= top_2_mask.replace(False, np.nan).ffill(limit=21).shift()       
+        signal *= (mkt.rank(axis=1, pct=True) <= 0.7).replace(False, np.nan).ffill(limit=21).shift()
+        signal *= (shmom.rank(axis=1, pct=True) >= 0.3).replace(False, np.nan).ffill(limit=21).shift()
         
+        signal = signal.fillna(0).rolling(5).mean()
 
         pf = signal.div(signal.sum(axis=1).replace(0, 1), axis=0) * 1e8
         return pf.fillna(0).loc[str(start): str(end)]
+
