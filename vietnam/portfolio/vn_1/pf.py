@@ -44,7 +44,7 @@ class Portfolio(BasePortfolio):
         ret = price.pct_change(fill_method=None)
         ret = ret[ret.abs().rank(axis=1, pct=True)<0.99]
         
-        shmom = ret.rolling(5).sum().abs()
+        shmom = ret.rolling(5).apply(lambda x: x.sum()).abs()
         
         
         
@@ -92,7 +92,7 @@ class Portfolio(BasePortfolio):
         signal *= (mkt.rank(axis=1, pct=True) <= 0.7).replace(False, np.nan).ffill(limit=21).shift()
         signal *= (shmom.rank(axis=1, pct=True) >= 0.3).replace(False, np.nan).ffill(limit=21).shift()
         
-        signal = signal.fillna(0).rolling(5).mean()
+        signal = signal.fillna(0).rolling(5).apply(lambda x: x.mean())
 
         pf = signal.div(signal.sum(axis=1).replace(0, 1), axis=0) * 1e8
         return pf.fillna(0).loc[str(start): str(end)]
